@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    
+    <!--  屏幕适配、覆盖web默认样式css  -->
+    <link rel="stylesheet" th:href="@{/css/umf.css}"/>
+
+    <!--  公共样式css  -->
+    <link rel="stylesheet" th:href="@{/css/shfwpt.css}"/>
+    
+    <!--  页面样式css  -->
+    <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /****    content    ****/
+
+        .content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background:#fff;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+        .content p{
+            height: 4rem;
+			font-size: 1.5rem; margin:2rem 0 0 0;
+		}	
+        
+		.logobox {
+            flex-direction: column;
+            justify-content: center;
+            align-items:left;
+            width: 100%;
+            height: 4rem;
+            /*background-color: #efefef;*/
+            opacity: .8; position:absolute;top:0;
+        }
+        .logobox img{			
+            margin: 1rem 0 0 1rem; max-height:2rem;
+			}
+        .login {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+/*            align-items: center;*/
+            width: 70%;
+            height: 9rem;
+            background-color: #fff;
+            opacity: .8;
+            
+        }
+
+        .login-btn {font-family:\5fae\8f6f\96c5\9ed1; 
+            width: 70%;
+            text-align: center;             
+            font-size: .8rem;
+            padding: .6rem 0;
+            background-color: #004790;
+            color: #fff;
+            border-radius: 30px; 
+   			border:0;
+            margin: 1.3rem 0 0 0;
+        }
+  		.login-btn:active {
+            opacity: .8;
+        }
+
+        .input { font-family:\5fae\8f6f\96c5\9ed1;
+            width: 100%;
+            height: 2.2rem;
+            margin: 0 0;
+            border: none 0;
+            outline: medium;
+            font-size: .8rem;
+            background: transparent;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -moz-tap-highlight-color: transparent;
+            border-bottom: 1px solid #ccc;
+        }
+        .input:hover  {border-bottom: 1px solid #c00;
+		}
+        label {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0 0 0;
+        }
+        label a {
+            font-size: .2rem;
+        }
+        
+        .content a:active {
+            opacity: .8;
+        }
+        
+    </style>
+</head>
+
+<body>
+    
+
+    <!--  content  -->
+    
+    <div class="content">
+    
+        <div class="logobox"><img th:src="@{/images/icon-spdb.jpg}" width="40%"/></div>
+       <form id="loginForm" style="width:80%;display:flex;flex-direction:column;align-items:center;">
+        <!--<p>浦发掌易收</p>-->
+        <div class="login">
+            <input id="userId" name="userId" placeholder="输入登录账号" class="input" type="text" value=""/>
+            <input id="password" name="password" placeholder="输入密码" class="input" type="password" value=""/>
+            <div class="">
+                <label>
+                    <input id="Fruit" name="Fruit" type="radio" value="0" />
+                    <a><span style="font-size:.6rem">记住密码</span></a >
+                </label>
+            </div>
+        </div>
+         <button id="submitBtn" type="submit" class="login-btn">登 录</button>
+      </form>
+    </div>
+        
+    <script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{/js/jquery.cookie.js}"></script>
+    <script th:src="@{/js/public.js}"></script>
+    <script th:src="@{/js/modernizr.custom.js}"></script>
+	<script th:inline="javascript"  type="text/javascript">
+	
+	$(function(){
+		 $("#userId").val(cookie.get("userId"));//填充内容 
+		 $("#password").val(cookie.get("pass"));//填充内容
+		  
+		 $("#Fruit").val(typeof(cookie.get("flag"))=='undefined'?"0":cookie.get("flag"));//填充内容
+         $('#loginForm').submit(function(){
+        	 	$('#submitBtn').addClass('disabled');
+		 	$('#password').blur();
+         
+        	  var userId = $('#userId').val();
+        	  var password=$('#password').val();
+        	  var flag=$('#Fruit').val();
+        	  if(''==userId){
+        		  commonAlert("用户名为空");
+        	  }
+        	  if(''==password){
+        		  commonAlert("密码为空");
+        	  }
+        	  var uri;
+        	  var token = cookie.get("token");
+        	  if (token==null || typeof(token)=='undefined'|| flag=='0'){
+        		  uri = '/login/loginIn.ajax';        		  
+        	  }else{
+        		  uri = '/login/loginInNoPW.ajax';       		  
+        	  }
+        	 var data={
+        			 userId:userId,
+        			 password:password,
+        			 flag:flag
+        	 };
+        	 
+            $.ajax({
+                cache: false,
+                contentType:"application/json;charset=utf-8",
+                dataType:'json', 
+                type: "POST",
+                url: requestURL+uri,
+                data:JSON.stringify(data),
+                beforeSend: function(request) {
+            	   	request.setRequestHeader("token", token);
+               },
+                success: function(data) {
+                     if(data.code==200) {
+                    	 	if(null!=data.data){
+                    	 		cookie.set("token",data.data,7);
+                    	 	}                        
+                        window.location.href = requestURL+'/AboutNewOrders/setAmount2.htm';
+                     }else  {
+                    	   cookie.delete("pass");
+                  	   cookie.delete("token");
+                  	   alert("用户密码有误,请重新登录");
+                  	   window.location.href = requestURL+'/login/toLogin.htm';
+                      }
+                     
+                }
+               
+            });
+            return false;
+         });                 
+	 });
+	$('input:radio').click(function(){
+	    var $radio = $(this);
+	    // if this was previously checked
+	    if ($radio.data('waschecked') == true){
+	    	  $('#Fruit').val("0");
+	      $radio.prop('checked', false);
+	      $radio.data('waschecked', false); 
+		  cookie.delete("userId");
+		  cookie.delete("flag");
+		  cookie.delete("pass");
+		  cookie.delete("token");
+	    } else {
+	      var userId = $('#userId').val();
+	      var pass = "********"; 
+		  cookie.set("userId",userId,30);
+		  cookie.set("pass",pass,30);
+		  cookie.set("flag","1",30);
+	      $radio.prop('checked', true);
+	      $radio.data('waschecked', true);
+	      $('#Fruit').val("1");
+	    }
+	  });
+	
+	</script>
+</body>
+
+</html>

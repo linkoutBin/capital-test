@@ -1,0 +1,16 @@
+server:
+    port: 8080
+
+logging:
+    level:
+        root: debug
+    file: wechat-gate.log
+
+#微信配置
+wechat:
+    app:
+        appid: wx4b4ec5e34f08b080
+        secret: 5d67367804f8c514240dcfe5cc30aa8d
+        token: testfork
+    api:
+        access_token: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s

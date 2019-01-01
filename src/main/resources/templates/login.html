@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>文档标题</title>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/util.js}"></script>
+<link rel="stylesheet" th:href="@{/css/shop.css}"/>
+</head>
+ 
+<body>
+<p><span id="flag1" class="nologin"><button id="register" onclick="register();" style="display:block;">注册</button></span></p>
+<p><span id="flag2" class="nologin"><button id="logout" onclick="" style="display:none;">注销</button></span></p>
+<p>
+<button id="rect" onclick="drawRect();" >方形</button><p>
+<button id="arc" onclick="drawArc();" >圆形</button><p>
+<button id="line" onclick="drawLine();" >划线</button><p>
+<button id="word" onclick="drawWord();" >写字</button><p>
+<canvas id="canvas" width="200" height="200" style="border:1px solid #000000">
+<p>
+
+<form id="loginForm" action="" method="post">
+	用户名：<input id="userid" type="text" name="userid" placeholder="请输入用户名">
+	密码: <input id="passwd" type="password" name="passwd" placeholder="请输入密码">
+	<p><input type="submit" value="登录"><span id="result" class="result"></span></p>
+</form>
+</body>
+</html>
